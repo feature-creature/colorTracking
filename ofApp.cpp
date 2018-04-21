@@ -2,6 +2,7 @@
 
 //---------------------
 void ofApp::setup(){
+    
     // initialize video source
     vidGrabber.setDeviceID(0);
     vidGrabber.setDesiredFrameRate(30);
@@ -14,6 +15,9 @@ void ofApp::setup(){
     
     // initialize threshold for target color
     // ?? what is the ideal initial value
+    //cout << "max 3d distance: " << endl;
+    //cout << ofDist(0,0,0,255,255,255)<< endl;
+    // min = 0. max = ~441
     threshold = 2.5;
 
     // initialize an instance of the snake class
