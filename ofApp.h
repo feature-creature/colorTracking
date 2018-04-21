@@ -24,4 +24,6 @@ public:
     float threshold;
 
     Snake spotted;
+
+    bool sourceVisible = true;
 };

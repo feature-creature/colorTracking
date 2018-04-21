@@ -91,10 +91,14 @@ void ofApp::update(){
 //---------------------
 void ofApp::draw(){
     ofBackground(0);
-    // show video 
-    vidGrabber.draw(0,0);
-    // write the current distance threshold value over the video feed
-    ofDrawBitmapString(threshold, 20, 20);
+
+    if(sourceVisible == true){
+        // show video 
+        vidGrabber.draw(0,0);
+        // write the current distance threshold value over the video feed
+        ofDrawBitmapString(threshold, 20, 20);
+    }
+
     // draw a circle at the current approximate averaged location of the target color
     // default white
     ofDrawEllipse (closestColorX, closestColorY, 40,40);
@@ -120,4 +124,5 @@ void ofApp::mousePressed(int x, int y, int button){
 void ofApp::keyPressed(int key){
     if (key == OF_KEY_UP) threshold+=1;//UP ARROW
     else if (key==OF_KEY_DOWN) threshold-=1;//DOWN ARROW
+    else if (key=='v')sourceVisible=!sourceVisible;
 }
