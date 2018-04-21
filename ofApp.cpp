@@ -78,11 +78,13 @@ void ofApp::update(){
         // if pixels with 'close' color have been tracked
         // determine the approximate average coordinates of the target color
         // within the current frame.
+        // To reduce data noise, do not update the average if it equals 0;
         // then send the coordinates to the instance of the snake class
-        // ?? maybe rewrite the global variable (one as sum, the other as average)
         if (count>0) {
-            closestColorX = sumCloseColorsX / count;
-            closestColorY = sumCloseColorsY / count;
+            if( sumCloseColorsX / count > 10 && sumCloseColorsY / count > 10){
+                closestColorX = sumCloseColorsX / count;
+                closestColorY = sumCloseColorsY / count;
+            }
             spotted.addLocation(closestColorX,closestColorY);
         }
     }
@@ -96,12 +98,14 @@ void ofApp::draw(){
         // show video 
         vidGrabber.draw(0,0);
         // write the current distance threshold value over the video feed
-        ofDrawBitmapString(threshold, 20, 20);
+        ofDrawBitmapString(threshold, 25, 25);
     }
 
+    // reduce visual noise if data is noisy
     // draw a circle at the current approximate averaged location of the target color
-    // default white
-    ofDrawEllipse (closestColorX, closestColorY, 40,40);
+    if( closestColorX > 10 && closestColorY > 10){
+        ofDrawEllipse (closestColorX, closestColorY, 25,25);
+    }
 
     // draw the snake
     spotted.draw();
