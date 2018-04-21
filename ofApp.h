@@ -10,16 +10,18 @@ public:
     void update();
     void draw();
     
-    // Replace this ofImage with live video, eventually
     ofVideoGrabber vidGrabber;
-    int closestColorX, closestColorY;
     void mousePressed(int x, int y, int button);
+    void keyPressed(int key);
+
+    int count;
+    int sumCloseColorsX, sumCloseColorsY;
+    int closestColorX, closestColorY;
+
     float rTarget;
     float gTarget;
     float bTarget;
     float threshold;
-    void keyPressed(int key);
-    int count;
 
     Snake spotted;
 };
