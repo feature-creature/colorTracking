@@ -13,6 +13,7 @@ void ofApp::setup(){
     bTarget = 193;
     
     // initialize threshold for target color
+    // ?? what is the ideal initial value
     threshold = 2.5;
 
     // initialize an instance of the snake class
@@ -57,17 +58,21 @@ void ofApp::update(){
                 float bAtXY = colorAtXY.b;
                 
                 // calculate color distance between
-                // the current pixel's color values 
-                // and the target color values
-                // ?? how does ofDist work
+                // the current pixel's RGB color values 
+                // and the target color's RGB values
+                // !!ofDist calculates 3D distance between points
+                // via the pythagorean theorem, but instead of traditional x,y,z distance
+                // we calculate r,g,b distance in the same way.
+                // ofDist returns a float
                 float colorDistance = ofDist(rAtXY, gAtXY, bAtXY, rTarget, gTarget, bTarget);
                 
-                // if distance between the two RGB colors is shorter than
-                // the current distance threshhold 
+                // if distance between the two RGB colors
+                // is shorter than the current distance threshhold 
                 // then increase the global count of pixels which have 'close' color by 1
                 // and add the current pixel's x and y coordinates to 
                 // the globally stored sum of x and y coordinates 
                 if(colorDistance < threshold){
+                    //cout << colorDistance << endl;
                     count++;
                     sumCloseColorsX+= x;
                     sumCloseColorsY+= y;
@@ -78,14 +83,14 @@ void ofApp::update(){
         // if pixels with 'close' color have been tracked
         // determine the approximate average coordinates of the target color
         // within the current frame.
-        // To reduce data noise, do not update the average if it equals 0;
         // then send the coordinates to the instance of the snake class
+        // To reduce data noise, do not update the average if it equals 0;
         if (count>0) {
             if( sumCloseColorsX / count > 10 && sumCloseColorsY / count > 10){
                 closestColorX = sumCloseColorsX / count;
                 closestColorY = sumCloseColorsY / count;
+                spotted.addLocation(closestColorX,closestColorY);
             }
-            spotted.addLocation(closestColorX,closestColorY);
         }
     }
 }
@@ -102,13 +107,13 @@ void ofApp::draw(){
     }
 
     // reduce visual noise if data is noisy
-    // draw a circle at the current approximate averaged location of the target color
     if( closestColorX > 10 && closestColorY > 10){
+        // draw a circle at the current approximate averaged location of the target color
         ofDrawEllipse (closestColorX, closestColorY, 25,25);
+        // draw the snake
+        spotted.draw();
     }
 
-    // draw the snake
-    spotted.draw();
 }
 
 //---------------------
@@ -127,6 +132,6 @@ void ofApp::mousePressed(int x, int y, int button){
 // between a pixel's color and the target color
 void ofApp::keyPressed(int key){
     if (key == OF_KEY_UP) threshold+=1;//UP ARROW
-    else if (key==OF_KEY_DOWN) threshold-=1;//DOWN ARROW
+    else if (key==OF_KEY_DOWN && threshold > 0) threshold-=1;//DOWN ARROW - prevent negatives
     else if (key=='v')sourceVisible=!sourceVisible;
 }

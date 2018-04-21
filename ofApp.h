@@ -26,4 +26,6 @@ public:
     Snake spotted;
 
     bool sourceVisible = true;
+    
+
 };
